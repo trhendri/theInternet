@@ -8,20 +8,37 @@ passwordField: '#password',
 
 //Buttons
 loginButton: 'button[type="submit"]',
+addElementButton: 'button=Add Element',
+deleteButton: '.added-manually',
 
 //Functions
 
-loginApp: async function () {
+loginApp: async function (username, password) {
    await browser.url('/login');
    const usernameField = await $(this.usernameField); 
    await usernameField.setValue('tomsmith');
-   const passwordField= $(this.passwordField);
+   const passwordField= await $(this.passwordField);
    await passwordField.setValue('SuperSecretPassword!');
-   await browser.pause(2000);
-   const loginButton = $(this.loginButton);
+   const loginButton = await $(this.loginButton);
    await loginButton.click();
-   await browser.pause(5000);
+   
+},
+
+addElement: async function() {
+    await browser.url('/add_remove_elements/');
+    const addElementButton= await $(this.addElementButton);
+    await addElementButton.click();
+    
+    
+
+},
+
+deleteElement: async function() {
+    await $(this.deleteButton).click();
 }
+
+
+//logoutPage:
 
 
 };
