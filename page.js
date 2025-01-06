@@ -1,4 +1,8 @@
 module.exports = {
+    // Title Page
+    dropDownPage: '//a[contains(text(), "Dropdown")]', //Xpath selector
+    //dropDown2: 'a[href="/dropdown"]', //CSS Selector
+    dropDownField: "#dropdown",
     //Inputs
     flashAlert: ".success",
     usernameField: "#username",
@@ -31,8 +35,5 @@ module.exports = {
         await $(this.deleteButton).click();
     },
 
-  
-
     //logoutPage:
 };
-
