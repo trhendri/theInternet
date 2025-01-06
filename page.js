@@ -13,6 +13,11 @@ module.exports = {
     addElementButton: "button=Add Element",
     deleteButton: ".added-manually",
 
+    //Checkboxes Page
+    checkboxesPage: '//a[contains(text(), "Checkboxes")]',
+    checkbox1: 'input[type="checkbox"]',
+    checkbox2: 'input[type="checkbox"]',
+   
     //Functions
 
     loginApp: async function (username, password) {
