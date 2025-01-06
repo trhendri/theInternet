@@ -31,7 +31,7 @@ module.exports = {
         await $(this.deleteButton).click();
     },
 
-    test1: 4
+  
 
     //logoutPage:
 };
