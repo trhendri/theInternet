@@ -1,9 +1,39 @@
 const page = require("../../page");
-//test
-describe("Login Page Tests", () => {
-    it("Should verify login with valid credentials", async () => {});
+const path = require("path"); // Need to learn the differences here.
+//import path from 'node:path';
 
-    it("Should verify login with invalid credentials", async () => {});
+describe("Login Page Tests", () => {
+    beforeEach(async () => {
+        await browser.url("/login");
+    });
+
+    it("Should verify login with valid credentials", async () => {
+        const username = "tomsmith";
+        const password = "SuperSecretPassword!";
+        await page.loginApp(username, password);
+        const flashAlert = await $(page.flashAlert).getText();
+        console.log(flashAlert);
+        console.log("test");
+
+        await expect(flashAlert).toContain("You logged into a secure area!");
+    });
+
+    /* it("Should verify login with invalid credentials", async () => {
+        const username = "tomsmithy";
+        const password = "SuperSecretpassword!";
+        await page.loginApp(username, password);
+        await browser.pause(5000);
+        await expect(browser).not.toHaveUrl("https://the-internet.herokuapp.com/secure");
+        const getText = await alertFlash.getText();
+    });
+    */
+    it("Verify login fails with blank username", async () => {});
+
+    it("Verify login fails with blank password", async () => {});
+
+    it("Verify login fails with both fields blank", async () => {});
+
+    it("Verify login session persists after page refresh", async () => {});
 });
 
 //DROPDOWN TESTS
@@ -92,11 +122,11 @@ describe("Checkbox Tests", () => {
 
     it("Verify checkbox 1 can be unchecked", async () => {
         const checkbox1 = await $$(page.checkbox1)[0];
+        //Check checkbox 1
         await checkbox1.click();
-
         await expect(checkbox1).toBeSelected();
+        //Check checkbox 2
         await checkbox1.click();
-
         await expect(checkbox1).not.toBeSelected();
     });
 
@@ -108,21 +138,99 @@ describe("Checkbox Tests", () => {
 
     it("Verify checkbox 2 can be unchecked", async () => {
         const checkbox2 = await $$(page.checkbox2)[0];
+        //Check checkbox 2
         await checkbox2.click();
-
         await expect(checkbox2).toBeSelected();
+        //Uncheck check box 2
         await checkbox2.click();
-
         await expect(checkbox2).not.toBeSelected();
     });
 
     it("Verify both checkboxes can be selected simultaneously", async () => {
         const checkbox1 = await $$(page.checkbox1)[0];
         const checkbox2 = await $$(page.checkbox2)[1];
+        //Check First Checkbox
         await checkbox1.click();
+        //Check Second Checkbox
         await checkbox2.click();
         await expect(checkbox1).toBeSelected();
         await expect(checkbox2).toBeSelected();
-        
+    });
+});
+
+//File Upload Tests
+
+describe("File Upload Tests", () => {
+    beforeEach(async () => {
+        await browser.url("/");
+        await $(page.fileUploadPage).click();
+    });
+
+    it("Verify successful file upload with valid file", async () => {
+        //import path from 'node:path'; //Using ES6 import syntax
+        //const path = require("path"); //Using commonJS require syntax,  added to to, and  Need to learn the differences here.
+
+        const filePath = path.join(__dirname, "../images/wdiorobot.jpg"); // optional: Correct Path: Using path.join(__dirname, 'test', 'Images', 'wdiorobot.jpg') ensures the file path is constructed correctly, considering the current directory (__dirname).
+        // const filePath = "test/Images/wdiorobot.jpg"; //useing file path, be sure to change to forward slash.
+
+        const remoteFilePath = await browser.uploadFile(filePath);
+        const uploadFile = await $("#file-upload");
+        const submitFile = await $("#file-submit");
+
+        await $(uploadFile).setValue(remoteFilePath);
+
+        await $(submitFile).click();
+
+        const successfulUpload = await $(".example>h3");
+
+        await expect(successfulUpload).toHaveText("File Uploaded!");
+
+        //Main concepts, file navigations, forward and backslashes, __dirname, path.join, and import vs const path = require.
+        //Also using toHaveText vs toBe.
+    });
+    
+
+    it("Verify upload fails with unsupported file types", async () => {
+        //Perhaps do more thorough testing to find which files are unsupported.
+        //Should be expected to fail
+        const filePath = path.join(__dirname, "../Audio/Doobly Doo.mp3");
+        const remoteFilePath = await browser.uploadFile(filePath);
+        const uploadFile = await $("#file-upload");
+        const submitFile = await $("#file-submit");
+
+        await $(uploadFile).setValue(remoteFilePath);
+
+        await $(submitFile).click();
+
+        const successfulUpload = await $(".example>h3");
+
+        await expect(successfulUpload).not.toHaveText("File Uploaded!");
+    });
+
+
+    it("Verify error message for no file selected", async () => {
+        //Expect to fail bc there is not an error message
+        const submitFile = await $("#file-submit");
+        await $(submitFile).click();
+        const errorText = await $("h1");
+        console.log(errorText);
+        await expect(errorText).toHaveText("Internal Server Error");
+    });
+
+    it("Verify uploaded file name is displayed", async () => {
+        const filePath = path.join(__dirname, "../images/wdiorobot.jpg"); // optional: Correct Path: Using path.join(__dirname, 'test', 'Images', 'wdiorobot.jpg') ensures the file path is constructed correctly, considering the current directory (__dirname).
+        // const filePath = "test/Images/wdiorobot.jpg"; //useing file path, be sure to change to forward slash.
+
+        const remoteFilePath = await browser.uploadFile(filePath);
+        const uploadFile = await $("#file-upload");
+        const submitFile = await $("#file-submit");
+
+        await $(uploadFile).setValue(remoteFilePath);
+        await $(submitFile).click();
+        const successfulUpload = await $(".example>h3");
+        await successfulUpload.waitForDisplayed();
+        const filename = await $("#uploaded-files").getText();
+        await expect(successfulUpload).toHaveText("File Uploaded!");
+        await expect(filename).toBe("wdiorobot.jpg");
     });
 });

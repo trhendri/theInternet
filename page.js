@@ -3,13 +3,9 @@ module.exports = {
     dropDownPage: '//a[contains(text(), "Dropdown")]', //Xpath selector
     //dropDown2: 'a[href="/dropdown"]', //CSS Selector
     dropDownField: "#dropdown",
-    //Inputs
-    flashAlert: ".success",
-    usernameField: "#username",
-    passwordField: "#password",
 
     //Buttons
-    loginButton: 'button[type="submit"]',
+
     addElementButton: "button=Add Element",
     deleteButton: ".added-manually",
 
@@ -17,15 +13,25 @@ module.exports = {
     checkboxesPage: '//a[contains(text(), "Checkboxes")]',
     checkbox1: 'input[type="checkbox"]',
     checkbox2: 'input[type="checkbox"]',
-   
+
+    //Login Page
+        //Inputs
+        flashAlert: ".success",
+        usernameField: "#username",
+        passwordField: "#password",
+        //Buttons
+        loginButton: 'button[type="submit"]',
+
+    //File Upload Page
+    fileUploadPage: '//a[contains(text(), "File Upload")]',
+
     //Functions
 
     loginApp: async function (username, password) {
-        await browser.url("/login");
         const usernameField = await $(this.usernameField);
-        await usernameField.setValue("tomsmith");
+        await usernameField.setValue(username);
         const passwordField = await $(this.passwordField);
-        await passwordField.setValue("SuperSecretPassword!");
+        await passwordField.setValue(password);
         const loginButton = await $(this.loginButton);
         await loginButton.click();
     },
@@ -40,5 +46,6 @@ module.exports = {
         await $(this.deleteButton).click();
     },
 
-    //logoutPage:
+
+    //fileUpload:
 };
