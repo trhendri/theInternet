@@ -2,15 +2,17 @@ const page = require("../../page");
 const path = require("path"); // Need to learn the differences here.
 //import path from 'node:path';
 
+//xit and xdescribe to skip tests and it.only and describe.only to target specific test
+
 describe("Login Page Tests", () => {
     beforeEach(async () => {
         await browser.url("/login");
     });
 
     it("Should verify login with valid credentials", async () => {
-        const username = "tomsmith";
-        const password = "SuperSecretPassword!";
-        await page.loginApp(username, password);
+        const validUsername = page.validUsername;
+        const validPassword = page.validPassword;
+        await page.loginApp(validUsername, validPassword);
         const flashAlert = await $(page.flashAlert).getText();
         console.log(flashAlert);
         console.log("test");
@@ -27,13 +29,53 @@ describe("Login Page Tests", () => {
         const getText = await alertFlash.getText();
     });
     */
-    it("Verify login fails with blank username", async () => {});
+    it("Verify login fails with blank username", async () => {
+        const blankUsername = page.blankUsername;
+        const validPassword = page.validPassword;
+        await page.loginApp(blankUsername, validPassword);
+        const flashAlertFail = await $(page.flashAlertFail).getText();
+        console.log(flashAlertFail);
+        console.log("test");
 
-    it("Verify login fails with blank password", async () => {});
+        await expect(flashAlertFail).toContain("Your username is invalid!");
+    });
 
-    it("Verify login fails with both fields blank", async () => {});
+    it("Verify login fails with blank password", async () => {
+        const validUsername = page.validUsername;
+        const blankPassword = page.blankPassword;
+        await page.loginApp(validUsername, blankPassword);
+        const flashAlertFail = await $(page.flashAlertFail).getText();
+        console.log(flashAlertFail);
+        console.log("test");
 
-    it("Verify login session persists after page refresh", async () => {});
+        await expect(flashAlertFail).toContain("Your password is invalid!");
+    });
+
+    it("Verify login fails with both fields blank", async () => {
+        const blankUsername = page.blankUsername;
+        const blankPassword = page.blankPassword;
+        await page.loginApp(blankUsername, blankPassword);
+        const flashAlertFail = await $(page.flashAlertFail).getText();
+        console.log(flashAlertFail);
+        console.log("test");
+
+        await expect(flashAlertFail).toContain("Your username is invalid!");
+    });
+
+    it("Verify login session persists after page refresh", async () => {
+        const validUsername = page.validUsername;
+        const validPassword = page.validPassword;
+        await page.loginApp(validUsername, validPassword);
+        const flashAlert = await $(page.flashAlert).getText();
+        console.log(flashAlert);
+        console.log("test");
+
+        await expect(flashAlert).toContain("You logged into a secure area!");
+        await browser.pause(1000);
+        await browser.refresh();
+        await browser.pause(2000);
+        await expect(browser).toHaveUrl("https://the-internet.herokuapp.com/secure");
+    });
 });
 
 //DROPDOWN TESTS
@@ -188,7 +230,6 @@ describe("File Upload Tests", () => {
         //Main concepts, file navigations, forward and backslashes, __dirname, path.join, and import vs const path = require.
         //Also using toHaveText vs toBe.
     });
-    
 
     it("Verify upload fails with unsupported file types", async () => {
         //Perhaps do more thorough testing to find which files are unsupported.
@@ -206,7 +247,6 @@ describe("File Upload Tests", () => {
 
         await expect(successfulUpload).not.toHaveText("File Uploaded!");
     });
-
 
     it("Verify error message for no file selected", async () => {
         //Expect to fail bc there is not an error message
@@ -232,5 +272,73 @@ describe("File Upload Tests", () => {
         const filename = await $("#uploaded-files").getText();
         await expect(successfulUpload).toHaveText("File Uploaded!");
         await expect(filename).toBe("wdiorobot.jpg");
+    });
+});
+
+//Dyanimic Loading Tests
+describe("Dynamic Loading Tests", () => {
+    beforeEach(async () => {
+        await browser.url("/");
+        await $(page.dynamicLoadingPage).click();
+    });
+
+    it('Verify the dynamic loading message is not visible before clicking "Start"', async () => {});
+
+    it("Verify the loading spinner appears after clicking 'Start.'", async () => {});
+
+    it("Verify the hidden element becomes visible after loading completes", async () => {});
+
+    it("Verify the duration of the loading process is consistent.", async () => {});
+
+    it("Verify the 'Start' button is functional and triggers the process.", async () => {});
+
+    it("Verify the dynamic loading message is hidden initially", async () => {});
+    it("Verify the hidden element becomes visible after the delay", async () => {});
+    it("Verify the 'Start' button is functional", async () => {});
+    it("Verify the element is fully visible after loading completes", async () => {});
+    it("Verify the page does not reload during the loading process", async () => {});
+});
+
+//Add/Remove Elements Tests
+describe("Add/Remove Elements Test", () => {
+    beforeEach(async () => {
+        await browser.url("/");
+        await $(page.addRemoveElementsPage).click();
+    });
+    it("Verify elements can be added dynamically", async () => {
+        await $(page.addElementButton).click();
+
+        const elementChildren = await $$(page.elementChildren);
+        console.log(elementChildren.length);
+        await expect(elementChildren.length).toBeGreaterThan(0); //targeting the existance of any number of child elements of #elements using #elements > *
+    });
+
+    it("Verify elements can be removed dynamically", async () => {
+        const addElementButton = await $(page.addElementButton);
+        await addElementButton.click();
+        const elementChildren = $$(page.elementChildren)[0];
+        await elementChildren.click();
+        await expect(elementChildren).not.toExist(); //toBePresent is the same as toExist
+
+       
+    });
+
+
+    it("Verify removing all added elements", async () => {
+         //Ideally, i want to delete each added element, no matter how many and confirm its deleted
+         await $(page.addElementButton).click();
+         await $(page.addElementButton).click();
+ 
+         //Clear already selected checkboxes
+         let elementChildren = await $$(page.elementChildren); // Grabs all children elements
+         for (const childrenToDelete of elementChildren) {
+             //For Loop. each chlid element will be named childrenToDelete
+             if (await childrenToDelete.isExisting) {
+                 //Loops through each existing child element
+                 await childrenToDelete.click(); // Clicks child element to delete
+             }
+         }
+         elementChildren = await $$(page.elementChildren); /// grabs the new value
+         await expect(elementChildren.length).toBe(0); //toExit or not.toExist is used for indiviual elements notarray. so use .length and .toBe(0)
     });
 });

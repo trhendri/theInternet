@@ -4,10 +4,11 @@ module.exports = {
     //dropDown2: 'a[href="/dropdown"]', //CSS Selector
     dropDownField: "#dropdown",
 
-    //Buttons
+    //Add/Remove Elements Page
+    addRemoveElementsPage: '//a[contains(text(), "Add/Remove Elements")]',
 
     addElementButton: "button=Add Element",
-    deleteButton: ".added-manually",
+    elementChildren: "#elements > *",
 
     //Checkboxes Page
     checkboxesPage: '//a[contains(text(), "Checkboxes")]',
@@ -15,15 +16,29 @@ module.exports = {
     checkbox2: 'input[type="checkbox"]',
 
     //Login Page
+        //Test Data
+        validUsername: "tomsmith",
+        invalidUsername: "tomesmithy",
+        validPassword: "SuperSecretPassword!",
+        invalidPassword: "SuperSecret",
+        blankUsername: "",
+        blankPassword: "",
+
         //Inputs
         flashAlert: ".success",
+        flashAlertFail: ".error",
         usernameField: "#username",
         passwordField: "#password",
+
         //Buttons
         loginButton: 'button[type="submit"]',
 
+
     //File Upload Page
     fileUploadPage: '//a[contains(text(), "File Upload")]',
+
+    //Dyanic Loading page
+    dynamicLoadingPage: '//a[contains(text(), "Dynamic Loading")]',
 
     //Functions
 
