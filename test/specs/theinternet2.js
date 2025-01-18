@@ -1,6 +1,7 @@
 const page = require("../../page");
 const path = require("path"); // Need to learn the differences here.
 //import path from 'node:path';
+import { Key } from 'webdriverio';
 
 //xit and xdescribe to skip tests and it.only and describe.only to target specific test
 
@@ -319,26 +320,81 @@ describe("Add/Remove Elements Test", () => {
         const elementChildren = $$(page.elementChildren)[0];
         await elementChildren.click();
         await expect(elementChildren).not.toExist(); //toBePresent is the same as toExist
-
-       
     });
-
 
     it("Verify removing all added elements", async () => {
-         //Ideally, i want to delete each added element, no matter how many and confirm its deleted
-         await $(page.addElementButton).click();
-         await $(page.addElementButton).click();
- 
-         //Clear already selected checkboxes
-         let elementChildren = await $$(page.elementChildren); // Grabs all children elements
-         for (const childrenToDelete of elementChildren) {
-             //For Loop. each chlid element will be named childrenToDelete
-             if (await childrenToDelete.isExisting) {
-                 //Loops through each existing child element
-                 await childrenToDelete.click(); // Clicks child element to delete
-             }
-         }
-         elementChildren = await $$(page.elementChildren); /// grabs the new value
-         await expect(elementChildren.length).toBe(0); //toExit or not.toExist is used for indiviual elements notarray. so use .length and .toBe(0)
+        //Ideally, i want to delete each added element, no matter how many and confirm its deleted
+        await $(page.addElementButton).click();
+        await $(page.addElementButton).click();
+
+        //Clear already selected checkboxes
+        let elementChildren = await $$(page.elementChildren); // Grabs all children elements
+        for (const childrenToDelete of elementChildren) {
+            //For Loop. each chlid element will be named childrenToDelete
+            if (await childrenToDelete.isExisting) {
+                //Loops through each existing child element
+                await childrenToDelete.click(); // Clicks child element to delete
+            }
+        }
+        elementChildren = await $$(page.elementChildren); /// grabs the new value
+        await expect(elementChildren.length).toBe(0); //toExit or not.toExist is used for indiviual elements notarray. so use .length and .toBe(0)
     });
+});
+
+//Hover Test cases
+
+describe("Hovers Tests", () => {
+    beforeEach(async () => {
+        await browser.url("/");
+        await $(page.hoverPage).click();
+    });
+
+    it("Verify that clicking the 'View profile' link navigates to the correct user profile page", async () => {
+        //Goal:
+        //1. Loop through each profile
+        //2. Click its associated view profile link
+        //3. Somewhow grab the profile info and cross ref with url to get assert
+        let profileImages = await $$(page.profileImages);
+
+        for (const user of profileImages) {
+            await user.moveTo();
+            const profileName = await user.$("h5").getText(); // get profile name
+
+            console.log(profileName);
+            const profileNameLastNumber = profileName.charAt(profileName.length - 1); //grab last char of profile name
+            console.log(profileNameLastNumber);
+
+            const viewProfileLink = await user.$("a"); //target link associated with current element. can target using //a contrains "view profile"
+
+            await viewProfileLink.click();
+            await browser.pause(2000);
+
+            await expect(browser).toHaveUrl("https://the-internet.herokuapp.com/users/" + profileNameLastNumber); //append that last character to url to confirm url
+
+            await browser.back();
+            await browser.refresh(); //after troubleshooting, this was only way to continue loop to second view profile link
+
+            profileImages = await $$(page.profileImages);
+            //await expect(browser).toHaveUrlContaining()
+        }
+    });
+
+    it("Verify that all images respond consistently to hover with visual effects or tooltips", async () => {
+        //Goal
+        //1. Loop over all profiles
+        //2. Confirm that tool hover change appears
+        let profileImages = await $$(page.profileImages);
+
+        for (const user of profileImages) {
+            await user.moveTo();
+
+            const caption = await user.$(".figcaption > h5");
+            const captionText = await caption.getText();
+            console.log(captionText);
+            await caption.waitForDisplayed();
+            await expect(caption).toBeDisplayed();
+        }
+    });
+
+   
 });

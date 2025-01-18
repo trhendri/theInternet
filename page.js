@@ -40,6 +40,11 @@ module.exports = {
     //Dyanic Loading page
     dynamicLoadingPage: '//a[contains(text(), "Dynamic Loading")]',
 
+    //Hovers
+    hoverPage: '//a[contains(text(), "Hovers")]',
+    profileImages: '.example > .figure',
+
+
     //Functions
 
     loginApp: async function (username, password) {
