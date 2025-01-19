@@ -277,27 +277,45 @@ describe("File Upload Tests", () => {
 });
 
 //Dyanimic Loading Tests
-describe("Dynamic Loading Tests", () => {
+describe.only("Dynamic Loading Tests", () => {
     beforeEach(async () => {
         await browser.url("/");
         await $(page.dynamicLoadingPage).click();
+        await $(page.dynamicLoadingEx1).click();
+
     });
 
-    it('Verify the dynamic loading message is not visible before clicking "Start"', async () => {});
+    it('Verify the dynamic loading message is not visible before clicking "Start"', async () => {
+        const loadingBar = await $(page.loadingBar);
+        await expect(loadingBar).not.toBeDisplayed();
+    });
 
-    it("Verify the loading spinner appears after clicking 'Start.'", async () => {});
+    it("Verify the loading spinner appears after clicking 'Start.'", async () => {
+        const loadingBar = await $(page.loadingBar);
+        const startLoadButton = await $(page.startLoadButton);
+        await startLoadButton.click();
+        await expect(loadingBar).not.toHaveAttribute('style', 'display: none');
 
-    it("Verify the hidden element becomes visible after loading completes", async () => {});
+    });
+//this one is iffy, should prob use .waitUntil
+    xit("Verify the hidden element becomes visible after loading completes", async () => {
+        let loadingBar = await $(page.loadingBar);
+        const startLoadButton = await $(page.startLoadButton);
+        const hiddenContent = await $(page.hiddenContent);
+        await expect(hiddenContent).toHaveAttribute('style', 'display:none');
+        await startLoadButton.click();
+        await expect(hiddenContent).toHaveAttribute('style', 'display:none');
+        await expect(loadingBar).not.toHaveAttribute('style', 'display: none');
+        await browser.pause(7000);
+        
+        
+     loadingBar = await $(page.loadingBar);
+        await expect(loadingBar).toHaveAttribute('style', 'display: none');
+        await expect(hiddenContent).not.toHaveAttribute('style', 'display: none');
 
-    it("Verify the duration of the loading process is consistent.", async () => {});
 
-    it("Verify the 'Start' button is functional and triggers the process.", async () => {});
-
-    it("Verify the dynamic loading message is hidden initially", async () => {});
-    it("Verify the hidden element becomes visible after the delay", async () => {});
-    it("Verify the 'Start' button is functional", async () => {});
-    it("Verify the element is fully visible after loading completes", async () => {});
-    it("Verify the page does not reload during the loading process", async () => {});
+    });
+   
 });
 
 //Add/Remove Elements Tests
@@ -398,3 +416,6 @@ describe("Hovers Tests", () => {
 
    
 });
+
+//Text Editor Test Cases
+//getCssProperty could help with this

@@ -16,34 +16,36 @@ module.exports = {
     checkbox2: 'input[type="checkbox"]',
 
     //Login Page
-        //Test Data
-        validUsername: "tomsmith",
-        invalidUsername: "tomesmithy",
-        validPassword: "SuperSecretPassword!",
-        invalidPassword: "SuperSecret",
-        blankUsername: "",
-        blankPassword: "",
+    //Test Data
+    validUsername: "tomsmith",
+    invalidUsername: "tomesmithy",
+    validPassword: "SuperSecretPassword!",
+    invalidPassword: "SuperSecret",
+    blankUsername: "",
+    blankPassword: "",
 
-        //Inputs
-        flashAlert: ".success",
-        flashAlertFail: ".error",
-        usernameField: "#username",
-        passwordField: "#password",
+    //Inputs
+    flashAlert: ".success",
+    flashAlertFail: ".error",
+    usernameField: "#username",
+    passwordField: "#password",
 
-        //Buttons
-        loginButton: 'button[type="submit"]',
-
+    //Buttons
+    loginButton: 'button[type="submit"]',
 
     //File Upload Page
     fileUploadPage: '//a[contains(text(), "File Upload")]',
 
     //Dyanic Loading page
     dynamicLoadingPage: '//a[contains(text(), "Dynamic Loading")]',
+    dynamicLoadingEx1: '//a[contains(text(), "hidden")]',
+    loadingBar: "#loading > img",
+    startLoadButton: 'button=Start', // '//button[text()="Start"]',
+    hiddenContent: "#finish",
 
     //Hovers
     hoverPage: '//a[contains(text(), "Hovers")]',
-    profileImages: '.example > .figure',
-
+    profileImages: ".example > .figure",
 
     //Functions
 
@@ -65,7 +67,6 @@ module.exports = {
     deleteElement: async function () {
         await $(this.deleteButton).click();
     },
-
 
     //fileUpload:
 };
