@@ -7,7 +7,6 @@ module.exports = {
     dropDownField: "#dropdown",
     dropDown1: 'option[value="1"]',
     dropDown2: 'option[value="2"]',
-    
 
     //Add/Remove Elements Page
     addRemoveElementsPage: '//a[contains(text(), "Add/Remove Elements")]',
@@ -41,25 +40,24 @@ module.exports = {
 
     //File Upload Page
     fileUploadPage: '//a[contains(text(), "File Upload")]',
-    uploadFile:'#file-upload',
-    submitFile: '#file-submit',
-    successfulUpload: '.example>h3',
-    fileName: '#uploaded-files',
+    uploadFile: "#file-upload",
+    submitFile: "#file-submit",
+    successfulUpload: ".example>h3",
+    fileName: "#uploaded-files",
     errorText: "h1",
-
 
     //Dyanic Loading page
     dynamicLoadingPage: '//a[contains(text(), "Dynamic Loading")]',
     dynamicLoadingEx1: '//a[contains(text(), "hidden")]',
     loadingBar: "#loading > img",
-    startLoadButton: 'button=Start', // '//button[text()="Start"]',
+    startLoadButton: "button=Start", // '//button[text()="Start"]',
     hiddenContent: "#finish",
 
     //Hovers
     hoverPage: '//a[contains(text(), "Hovers")]',
     profileImages: ".example > .figure",
-    caption: '.figcaption>h5',
-    profileName: 'h5',
+    caption: ".figcaption>h5",
+    profileName: "h5",
 
     //Functions
 

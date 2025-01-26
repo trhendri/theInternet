@@ -1,7 +1,7 @@
 const page = require("../../page");
 const path = require("path"); // Need to learn the differences here.
 //import path from 'node:path';
-import { Key } from 'webdriverio';
+import { Key } from "webdriverio";
 
 //xit and xdescribe to skip tests and it.only and describe.only to target specific test
 
@@ -252,9 +252,9 @@ describe("File Upload Tests", () => {
     it("Verify error message for no file selected", async () => {
         //Expect to fail bc there is not an error message
         const submitFile = await $(page.submitFile);
-        
+
         await $(submitFile).click();
-       
+
         const errorText = await $(page.errorText);
         console.log(errorText);
         await expect(errorText).toHaveText("Internal Server Error");
@@ -284,7 +284,6 @@ describe("Dynamic Loading Tests", () => {
         await browser.url("/");
         await $(page.dynamicLoadingPage).click();
         await $(page.dynamicLoadingEx1).click();
-
     });
 
     it('Verify the dynamic loading message is not visible before clicking "Start"', async () => {
@@ -296,28 +295,23 @@ describe("Dynamic Loading Tests", () => {
         const loadingBar = await $(page.loadingBar);
         const startLoadButton = await $(page.startLoadButton);
         await startLoadButton.click();
-        await expect(loadingBar).not.toHaveAttribute('style', 'display: none');
-
+        await expect(loadingBar).not.toHaveAttribute("style", "display: none");
     });
-//this one is iffy, should prob use .waitUntil
+    //this one is iffy, should prob use .waitUntil
     xit("Verify the hidden element becomes visible after loading completes", async () => {
         let loadingBar = await $(page.loadingBar);
         const startLoadButton = await $(page.startLoadButton);
         const hiddenContent = await $(page.hiddenContent);
-        await expect(hiddenContent).toHaveAttribute('style', 'display:none');
+        await expect(hiddenContent).toHaveAttribute("style", "display:none");
         await startLoadButton.click();
-        await expect(hiddenContent).toHaveAttribute('style', 'display:none');
-        await expect(loadingBar).not.toHaveAttribute('style', 'display: none');
+        await expect(hiddenContent).toHaveAttribute("style", "display:none");
+        await expect(loadingBar).not.toHaveAttribute("style", "display: none");
         await browser.pause(7000);
-        
-        
-     loadingBar = await $(page.loadingBar);
-        await expect(loadingBar).toHaveAttribute('style', 'display: none');
-        await expect(hiddenContent).not.toHaveAttribute('style', 'display: none');
 
-
+        loadingBar = await $(page.loadingBar);
+        await expect(loadingBar).toHaveAttribute("style", "display: none");
+        await expect(hiddenContent).not.toHaveAttribute("style", "display: none");
     });
-   
 });
 
 //Add/Remove Elements Tests
@@ -415,8 +409,6 @@ describe("Hovers Tests", () => {
             await expect(caption).toBeDisplayed();
         }
     });
-
-   
 });
 
 //Text Editor Test Cases
