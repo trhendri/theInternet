@@ -1,4 +1,12 @@
 const page = require("../../page");
+
+//Just ref: Currently theinternet2.js in use.
+
+
+
+
+
+
 /*
 // The internet ONE
 describe("Upon Opening Page", () => {
