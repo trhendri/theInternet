@@ -1,8 +1,13 @@
 module.exports = {
     // Title Page
+
+    //Drop Down Page
     dropDownPage: '//a[contains(text(), "Dropdown")]', //Xpath selector
     //dropDown2: 'a[href="/dropdown"]', //CSS Selector
     dropDownField: "#dropdown",
+    dropDown1: 'option[value="1"]',
+    dropDown2: 'option[value="2"]',
+    
 
     //Add/Remove Elements Page
     addRemoveElementsPage: '//a[contains(text(), "Add/Remove Elements")]',
@@ -14,6 +19,7 @@ module.exports = {
     checkboxesPage: '//a[contains(text(), "Checkboxes")]',
     checkbox1: 'input[type="checkbox"]',
     checkbox2: 'input[type="checkbox"]',
+    checkboxes: 'input[type="checkbox"]',
 
     //Login Page
     //Test Data
@@ -35,6 +41,12 @@ module.exports = {
 
     //File Upload Page
     fileUploadPage: '//a[contains(text(), "File Upload")]',
+    uploadFile:'#file-upload',
+    submitFile: '#file-submit',
+    successfulUpload: '.example>h3',
+    fileName: '#uploaded-files',
+    errorText: "h1",
+
 
     //Dyanic Loading page
     dynamicLoadingPage: '//a[contains(text(), "Dynamic Loading")]',
@@ -46,6 +58,8 @@ module.exports = {
     //Hovers
     hoverPage: '//a[contains(text(), "Hovers")]',
     profileImages: ".example > .figure",
+    caption: '.figcaption>h5',
+    profileName: 'h5',
 
     //Functions
 

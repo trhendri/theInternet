@@ -86,7 +86,7 @@ describe("Dropdown Tests", () => {
         await browser.url("/");
         await $(page.dropDownPage).click();
         await $(page.dropDownField).click();
-        await $('option[value="1"]').click();
+        await $(page.dropDown1).click();
         const value = await $(page.dropDownField).getValue();
         console.log(value);
         await expect(value).toBe("1");
@@ -96,7 +96,7 @@ describe("Dropdown Tests", () => {
         await browser.url("/");
         await $(page.dropDownPage).click();
         await $(page.dropDownField).click();
-        await $('option[value="2"]').click();
+        await $(page.dropDown2).click();
         const value = await $(page.dropDownField).getValue();
         console.log(value);
         await expect(value).toBe("2");
@@ -121,14 +121,14 @@ describe("Dropdown Tests", () => {
 
         //Select and verify first option chage to 2
         await $(page.dropDownField).click();
-        await $('option[value="2"]').click();
+        await $(page.dropDown2).click();
         const firstSelection = await $(page.dropDownField).$("option:checked").getValue();
         console.log(firstSelection);
         await expect(firstSelection).toBe("2");
 
         //Select and verify second option change to 1
         await $(page.dropDownField).click();
-        await $('option[value="1"]').click();
+        await $(page.dropDown1).click();
         const secondSelection = await $(page.dropDownField).$("option:checked").getValue();
         console.log(secondSelection);
         await expect(secondSelection).toBe("1");
@@ -147,7 +147,7 @@ describe("Checkbox Tests", () => {
         await $(page.checkboxesPage).click();
 
         //Clear already selected checkboxes
-        const checkboxes = await $$('input[type="checkbox"]'); // Grabs both/all checkboxes
+        const checkboxes = await $$(page.checkboxes); // Grabs both/all checkboxes
         for (const checkbox of checkboxes) {
             //For Loop. each checkbox in/of checkboxes array will be named "checkbox"
             if (await checkbox.isSelected()) {
@@ -217,14 +217,14 @@ describe("File Upload Tests", () => {
         // const filePath = "test/Images/wdiorobot.jpg"; //useing file path, be sure to change to forward slash.
 
         const remoteFilePath = await browser.uploadFile(filePath);
-        const uploadFile = await $("#file-upload");
-        const submitFile = await $("#file-submit");
+        const uploadFile = await $(page.uploadFile);
+        const submitFile = await $(page.submitFile);
 
         await $(uploadFile).setValue(remoteFilePath);
 
         await $(submitFile).click();
 
-        const successfulUpload = await $(".example>h3");
+        const successfulUpload = await $(page.successfulUpload);
 
         await expect(successfulUpload).toHaveText("File Uploaded!");
 
@@ -234,11 +234,11 @@ describe("File Upload Tests", () => {
 
     it("Verify upload fails with unsupported file types", async () => {
         //Perhaps do more thorough testing to find which files are unsupported.
-        //Should be expected to fail
+        //Should be expected to fail - find unsupported file
         const filePath = path.join(__dirname, "../Audio/Doobly Doo.mp3");
         const remoteFilePath = await browser.uploadFile(filePath);
-        const uploadFile = await $("#file-upload");
-        const submitFile = await $("#file-submit");
+        const uploadFile = await $(page.uploadFile);
+        const submitFile = await $(page.submitFile);
 
         await $(uploadFile).setValue(remoteFilePath);
 
@@ -251,9 +251,11 @@ describe("File Upload Tests", () => {
 
     it("Verify error message for no file selected", async () => {
         //Expect to fail bc there is not an error message
-        const submitFile = await $("#file-submit");
+        const submitFile = await $(page.submitFile);
+        
         await $(submitFile).click();
-        const errorText = await $("h1");
+       
+        const errorText = await $(page.errorText);
         console.log(errorText);
         await expect(errorText).toHaveText("Internal Server Error");
     });
@@ -263,21 +265,21 @@ describe("File Upload Tests", () => {
         // const filePath = "test/Images/wdiorobot.jpg"; //useing file path, be sure to change to forward slash.
 
         const remoteFilePath = await browser.uploadFile(filePath);
-        const uploadFile = await $("#file-upload");
-        const submitFile = await $("#file-submit");
+        const uploadFile = await $(page.uploadFile);
+        const submitFile = await $(page.submitFile);
 
         await $(uploadFile).setValue(remoteFilePath);
         await $(submitFile).click();
-        const successfulUpload = await $(".example>h3");
+        const successfulUpload = await $(page.successfulUpload);
         await successfulUpload.waitForDisplayed();
-        const filename = await $("#uploaded-files").getText();
+        const filename = await $(page.fileName).getText();
         await expect(successfulUpload).toHaveText("File Uploaded!");
         await expect(filename).toBe("wdiorobot.jpg");
     });
 });
 
 //Dyanimic Loading Tests
-describe.only("Dynamic Loading Tests", () => {
+describe("Dynamic Loading Tests", () => {
     beforeEach(async () => {
         await browser.url("/");
         await $(page.dynamicLoadingPage).click();
@@ -376,7 +378,7 @@ describe("Hovers Tests", () => {
 
         for (const user of profileImages) {
             await user.moveTo();
-            const profileName = await user.$("h5").getText(); // get profile name
+            const profileName = await user.$(page.profileName).getText(); // get profile name
 
             console.log(profileName);
             const profileNameLastNumber = profileName.charAt(profileName.length - 1); //grab last char of profile name
@@ -406,7 +408,7 @@ describe("Hovers Tests", () => {
         for (const user of profileImages) {
             await user.moveTo();
 
-            const caption = await user.$(".figcaption > h5");
+            const caption = await user.$(page.caption);
             const captionText = await caption.getText();
             console.log(captionText);
             await caption.waitForDisplayed();
